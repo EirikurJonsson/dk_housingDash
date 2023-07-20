@@ -1,10 +1,10 @@
-def getHousingData(asPandas: bool):
+def getHousingData(asPandas: bool, postCode: int):
     import requests
     if asPandas:
         import pandas as pd
     
 
-    url = "https://api.boliga.dk/api/v2/search/results?pageSize=50&sort=daysForSale-a&propertyType=1,2,3,4,6&zipCodes=5210&includeds=1"
+    url = f"https://api.boliga.dk/api/v2/search/results?pageSize=500&sort=daysForSale-a&propertyType=1,2,3,4,6&zipCodes={postCode}&searchArchive=true&includeds=1"
 
     payload = {}
     headers = {
@@ -17,6 +17,9 @@ def getHousingData(asPandas: bool):
     }
     response = requests.request("GET", url, headers=headers, data=payload)
     tmp = response.json()
+    if tmp['meta']['totalPages'] > 1:
+        print('there is more data to get')
+        pass
     if asPandas:
         return pd.DataFrame.from_dict(tmp['results'])
     else:
