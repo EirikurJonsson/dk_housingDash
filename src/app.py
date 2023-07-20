@@ -9,3 +9,5 @@ data = json.load(f)
 
 df = pd.DataFrame.from_dict(data['results'])
 print(df)
+
+
