@@ -1,5 +1,7 @@
 def getHousingData(asPandas: bool, postCode: int):
     import requests
+    from time import sleep
+    import numpy as np
     from .makeHousingDataRequest import makeHousingDataRequest
     if asPandas:
         import pandas as pd
