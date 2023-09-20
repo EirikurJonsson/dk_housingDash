@@ -1,6 +1,6 @@
 import requests
 def makeHousingDataRequest(postCodeRequest: int, page: int):
-    url = f"https://api.boliga.dk/api/v2/search/results?pageSize=500&sort=daysForSale-a&propertyType=1,2,3,4,6&zipCodes={postCodeRequest}&searchArchive=true&page={page}&includeds=1"
+    url = f"https://api.boliga.dk/api/v2/search/results?pageSize=500&sort=daysForSale-a&propertyType=1,2,3,4,6&zipCodes={postCodeRequest}&searchArchive=false&page={page}&includeds=1"
 
 
     payload = {}
