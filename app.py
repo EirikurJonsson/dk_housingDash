@@ -65,15 +65,21 @@ app.layout = dbc.Container(
 def updateMap(input_value):
     df = getHousingData(input_value)
     df = df.dropna(subset = ['images'])
-    meanPriceInfo = getNumericalStats(df = df, col = 'price')
-    print(meanPriceInfo)
+    df['price'] = df['price'].astype(float).round(2)
+    df['size'] = df['size'].astype(float).round(2)
+    df['priceStandard'] = (df['price'] / df['size']).round(2)
+    meanPriceInfo = getNumericalStats(df = df, col = 'priceStandard')
 
     belowMean = "./assets/belowMean.png"
     belowMedian = './assets/belowMedian.png'
     belowStd = './assets/belowStd.png'
     standardPrice = './assets/standardPrice.png'
 
-    df['priceInfo'] = [belowStd if row['price'] < meanPriceInfo['mean'] - meanPriceInfo['std'] else belowMedian if row['price'] < meanPriceInfo['median'] else belowMean if row['price'] < meanPriceInfo['mean'] else standardPrice  for _, row in df.iterrows()]
+    df['priceInfo'] = [
+            belowStd if row['priceStandard'] < meanPriceInfo['mean'] - meanPriceInfo['std'] else belowMedian 
+            if row['priceStandard'] < meanPriceInfo['median'] else belowMean 
+            if row['priceStandard'] < meanPriceInfo['mean'] else standardPrice  
+            for _, row in df.iterrows()]
     print(df)
     return [
             dl.Marker(
@@ -89,6 +95,10 @@ def updateMap(input_value):
                     <li>Rooms : {row['rooms']}</li>
                     <li>Size : {row['size']}</li>
                     <li>Property Size : {row['lotSize']}</li>
+                    <li>This property standardized price {row['priceStandard']}</li>
+                    <li>Average Standard price in area : {meanPriceInfo['mean']}</li>
+                    <li>Median Standard Price in Area: {meanPriceInfo['median']}</li>
+                    <li>STD of the Standard Price in Area : {meanPriceInfo['std']}</li>
                     </ol>
                     """
                     )
